@@ -94,16 +94,9 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/create-github-app-token@v3
-        id: token
-        with:
-          app-id: ${{ secrets.RELEASE_APP_ID }}
-          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
-
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-          token: ${{ steps.token.outputs.token }}
 
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v4
@@ -149,14 +142,28 @@ jobs:
             echo "versao=${versao}" >> "$GITHUB_OUTPUT"
           fi
 
+      # Push comum não precisa de credencial de escrita. O token do App só é
+      # criado depois de provar que este commit consumiu fragmentos e realmente
+      # vai cortar uma release. Assim forks sem RELEASE_APP_* ficam verdes em
+      # todo push normal, mas uma tentativa real de publicar continua falhando
+      # fechada se a credencial estiver ausente.
+      - uses: actions/create-github-app-token@v3
+        if: steps.pendente.outputs.cortar == 'sim'
+        id: token
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
       - name: Criar e empurrar a tag
         if: steps.pendente.outputs.cortar == 'sim'
         env:
+          RELEASE_TOKEN: ${{ steps.token.outputs.token }}
           VERSAO: ${{ steps.pendente.outputs.versao }}
         run: |
           set -euo pipefail
           git config user.name  'imobi-release[bot]'
           git config user.email '${{ steps.token.outputs.app-slug }}[bot]@users.noreply.github.com'
+          git remote set-url origin "https://x-access-token:${RELEASE_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           # Tag ANOTADA: guarda autor e data, e é o que `git describe
           # --exact-match` do agent.sh espera encontrar na VPS.
           git tag -a "v${VERSAO}" -m "v${VERSAO}"
