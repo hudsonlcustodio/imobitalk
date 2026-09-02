@@ -15,7 +15,9 @@ set -euo pipefail
 # de qualquer 'cd' (step 2 pode entrar num repo clonado à parte).
 KIT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 
-REPO_URL="${REPO_URL:-${IMOBI_REPO_URL:-}}"
+IMOBI_GHCR_OWNER="${IMOBI_GHCR_OWNER:-hudsonlcustodio}"
+IMOBI_REPO_URL="${IMOBI_REPO_URL:-https://github.com/hudsonlcustodio/imobitalk.git}"
+REPO_URL="${REPO_URL:-$IMOBI_REPO_URL}"
 # Uma constante, dois usos (o fim feliz e o fim travado) — e o comecar.sh tem a
 # gêmea. Link repetido à mão vira link divergente na primeira troca.
 COMUNIDADE_URL="https://lp-comunidade.automatiklabs.com.br"
@@ -1448,6 +1450,8 @@ esac
 
 {
   printf '# Gerado por install.sh — NÃO comitar. Contém segredos.\n'
+  envq IMOBI_GHCR_OWNER "$IMOBI_GHCR_OWNER"
+  envq IMOBI_REPO_URL "$IMOBI_REPO_URL"
   envq APP_IMAGE "$APP_IMAGE"
   envq APP_PULL_POLICY "$PULL_POLICY_ALVO"
   # Worker e scheduler acompanham a MESMA versão do app: um em 1.2.1 e outro em

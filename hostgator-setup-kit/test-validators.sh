@@ -1679,7 +1679,7 @@ STUB
   rodar install.sh --yes >/dev/null
   unset REPO_URL
 
-  for par in "APP_IMAGE:deskcommcrm" "WORKER_IMAGE:imobi-worker" "SCHEDULER_IMAGE:imobi-scheduler"; do
+  for par in "APP_IMAGE:imobi-crm" "WORKER_IMAGE:imobi-worker" "SCHEDULER_IMAGE:imobi-scheduler"; do
     chave="${par%%:*}"; repo="${par##*:}"
     if [ "$(valor_no_env "$VPS_PROJ/.env" "$chave")" != "${IMG_NS}/${repo}:1.10.0" ]; then
       printf '  ✗ %s não foi pinado na versão resolvida (1.10.0): %s\n' "$chave" \
@@ -1706,6 +1706,17 @@ echo "packaging: a tag do git não basta — as imagens têm de existir"
 # GHCR nasce privado, e repositório público não muda isso.
 TMP_PRIV="$(mktemp -d)"
 (
+  origem="$TMP_PRIV/origem.git"
+  git init --quiet --bare "$origem"
+  git clone --quiet "$origem" "$TMP_PRIV/w" 2>/dev/null
+  (
+    cd "$TMP_PRIV/w" || exit 1
+    git config user.email t@t; git config user.name t
+    echo x > a; git add -A; git commit --quiet -m init
+    git tag v1.10.0
+    git push --quiet origin HEAD --tags 2>/dev/null
+  )
+
   montar_vps "$TMP_PRIV/vps" "crmpriv" <<'STUB'
 #!/usr/bin/env bash
 printf '%s\n' "$*" >> "$DOCKER_LOG"
@@ -1714,9 +1725,10 @@ case "$1" in
 esac
 exit 0
 STUB
+  export REPO_URL="$origem"
   export DUBLE_GHCR=403          # pacote existe mas está PRIVADO
   saida="$(rodar install.sh --yes)"
-  unset DUBLE_GHCR
+  unset DUBLE_GHCR REPO_URL
 
   if ! printf '%s' "$saida" | grep -q "construídas neste servidor"; then
     printf '  ✗ com as imagens inalcançáveis, o instalador não avisou que ia construir aqui\n'
@@ -1961,7 +1973,7 @@ STUB
 
   # 1. Recusa. O sintoma do defeito era instalar em silêncio; qualquer coisa que
   #    não seja parar aqui é o defeito de volta.
-  if ! printf '%s' "$saida" | grep -q 'Já existe um DeskcommCRM NO AR'; then
+  if ! printf '%s' "$saida" | grep -q 'Já existe um IMOBI CRM NO AR'; then
     printf '  ✗ NÃO recusou a instalação por cima da que está no ar\n'
     printf '     últimas linhas: %s\n' "$(printf '%s' "$saida" | tail -3 | tr '\n' ' ')"; exit 1
   fi
