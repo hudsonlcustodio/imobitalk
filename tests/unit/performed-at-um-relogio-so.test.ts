@@ -52,13 +52,12 @@ function arquivosQueEscrevemAtividade(): string[] {
   for (const marca of MARCAS) {
     let saida = "";
     try {
-      saida = execFileSync(
-        "grep",
-        ["-rl", "--include=*.ts", "--include=*.tsx", marca, ...PASTAS],
-        { cwd: RAIZ, encoding: "utf8" },
-      );
+      saida = execFileSync("rg", ["-l", "--glob", "*.ts", "--glob", "*.tsx", marca, ...PASTAS], {
+        cwd: RAIZ,
+        encoding: "utf8",
+      });
     } catch {
-      // `grep` sai com 1 quando não acha nada, e o `execFileSync` LANÇA. Sem
+      // `rg` sai com 1 quando não acha nada, e o `execFileSync` LANÇA. Sem
       // este catch, a sabotagem da varredura vazia derrubava o arquivo inteiro
       // com "Command failed" e nem chegava na guarda — o teste não passava por
       // vacuidade, ele simplesmente NÃO RODAVA, que é igualmente cego.
