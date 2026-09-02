@@ -16,6 +16,12 @@ updates:
       # Minor e patch dentro do 22 continuam entrando pelo grupo acima.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+      # Tailwind 4 não é um bump de dependência: move o plugin PostCSS para
+      # `@tailwindcss/postcss` e exige migração coordenada da configuração e do
+      # CSS. O Dependabot continua entregando correções 3.x; o próximo major só
+      # entra por uma mudança deliberada, com build e prova visual próprios.
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
