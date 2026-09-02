@@ -1,0 +1,136 @@
+{
+  "project": "IMOBI CRM",
+  "date": "2026-09-01",
+  "status": "release-candidate",
+  "checks": [
+    {
+      "check": "package.json parse",
+      "status": "pass"
+    },
+    {
+      "check": "yaml:e2e.yml",
+      "status": "pass"
+    },
+    {
+      "check": "yaml:relogio.yml",
+      "status": "pass"
+    },
+    {
+      "check": "yaml:security.yml",
+      "status": "pass"
+    },
+    {
+      "check": "yaml:perf.yml",
+      "status": "pass"
+    },
+    {
+      "check": "yaml:publish-image.yml",
+      "status": "pass"
+    },
+    {
+      "check": "yaml:release.yml",
+      "status": "pass"
+    },
+    {
+      "check": "yaml:ci.yml",
+      "status": "pass"
+    },
+    {
+      "check": "yaml:docker-compose.prod.yml",
+      "status": "pass"
+    },
+    {
+      "check": "node --check scripts/db-migrate.mjs",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "node --check scripts/production-preflight.mjs",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "bash -n hostgator-setup-kit/_common.sh",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "bash -n hostgator-setup-kit/install.sh",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "bash -n hostgator-setup-kit/marca-emails.sh",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "bash -n scripts/backup-db.sh",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "bash -n tests/shell/update-guard.test.sh",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "check": "tests/shell/update-guard.test.sh",
+      "status": "pass",
+      "detail": " que não conseguiu comparar (CONTIDA=2 isolado)\n  ✓ e não anuncia a tag que não conseguiu confirmar\n── 9. Sem NENHUMA tag conhecida + fetch --tags falhou: fallback isolado\n  ✓ fixture: nenhuma tag v* conhecida localmente\n  ✓ sem tag nenhuma conhecida e sem conseguir buscar, o heartbeat diz que não sabe (fallback isolado)\n  ✓ e não anuncia versão nenhuma\n\n── 10. Pin pela metade: o estado que a 1ª atualização deixa, e ninguém via\n  ✓ app pinado + worker/scheduler AUSENTES → acusa os dois\n  ✓ app pinado + worker em canal móvel → acusa\n  ✓ as três na mesma versão → silêncio\n  ✓ app num canal deliberado (:latest) → não é 'metade', silêncio\n  ✓ valores entre aspas, como o install grava → silêncio\n── 11. Autocorreção do pin: preenche lacuna, nunca sobrescreve decisão\n  ✓ chave AUSENTE → preenche os dois\n  ✓   e grava a versão da imagem em execução, não um canal\n  ✓   com pull_policy de tag imutável\n  ✓ idempotente: 2ª passada não corrige nada\n  ✓   e não altera um byte do .env\n  ✓ canal móvel EXPLÍCITO → não toca (é decisão de quem opera)\n  ✓   o :stable escolhido continua lá, intacto\n  ✓ já pinada → silêncio\n  ✓ imagem sem label de versão → não inventa pin\nOK — todas as provas passaram.\n"
+    },
+    {
+      "check": "frontend Deskcomm visible-string audit",
+      "status": "pass",
+      "detail": []
+    },
+    {
+      "check": "pnpm typecheck",
+      "status": "pass",
+      "detail": "NODE_OPTIONS=--max-old-space-size=8192"
+    },
+    {
+      "check": "pnpm lint",
+      "status": "pass",
+      "detail": "0 errors; 305 warnings preexisting"
+    },
+    {
+      "check": "lint:channels + lint:role-rank",
+      "status": "pass"
+    },
+    {
+      "check": "pnpm build",
+      "status": "pass",
+      "detail": "Next.js 16.3.3; network-enabled font fetch; 47 static pages"
+    },
+    {
+      "check": "pnpm test:unit",
+      "status": "partial",
+      "detail": "6727 passed + 1 expected fail; 4 concurrency timeouts on Windows; the 4 files passed 16/16 with maxWorkers=1"
+    },
+    {
+      "check": "test:shell",
+      "status": "platform-blocked",
+      "detail": "Windows/NTFS failed only the POSIX chmod 0600 assertion; CI Linux remains authoritative"
+    }
+  ],
+  "external_verification": [
+    {
+      "item": "Next.js",
+      "resolved": "16.3.3",
+      "result": "patched for Aug 25 2026 critical advisories",
+      "source": "Next.js/GitHub vendor advisory"
+    },
+    {
+      "item": "Supabase migrations",
+      "result": "db push --db-url and --dry-run are official supported CLI paths",
+      "source": "Supabase official CLI docs"
+    }
+  ],
+  "not_executed": [
+    "pnpm test:db and pnpm test:e2e: Docker daemon unavailable",
+    "Docker image build/start: Docker daemon unavailable",
+    "hostgator-setup-kit/test-validators.sh: exceeds available execution window",
+    "restore/failover: requires staging/real infrastructure"
+  ]
+}
