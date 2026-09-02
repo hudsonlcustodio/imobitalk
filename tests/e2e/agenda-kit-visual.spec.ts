@@ -16,6 +16,7 @@ import { lerCreds, loginComoAdmin } from "./helpers/login-admin";
 const ESPERA = 60_000;
 
 const VITRINE = "/vitrine-agenda";
+const CHAVE_TEMA = "imobi-theme";
 
 /**
  * A vitrine não toca banco, mas EXIGE SESSÃO — e essa distinção custou uma
@@ -141,19 +142,25 @@ test.describe("kit visual da Agenda", () => {
   test.beforeEach(async () => {
     // `goto` a cada teste devolve a tela ao estado inicial sem novo login — a
     // sessão vive no contexto, não na página. O localStorage do tema NÃO volta
-    // sozinho, e sem limpá-lo o teste que troca para o escuro contaminaria o
-    // seguinte: ele mediria "as cores do tema claro" num tema escuro e passaria,
-    // porque a régua de contraste vale para os dois.
+    // sozinho, e sem fixá-lo no claro o teste que troca para o escuro contaminaria
+    // o seguinte: ele mediria "as cores do tema claro" num tema escuro e passaria,
+    // porque a régua de contraste vale para os dois. Fixar em `light`, em vez de
+    // remover a chave, também torna o teste independente do tema do sistema do CI.
     await page.goto(VITRINE);
-    await page.evaluate(() => {
+    await page.evaluate((chaveTema) => {
       try {
-        window.localStorage.removeItem("deskcomm-theme");
+        window.localStorage.setItem(chaveTema, "light");
       } catch {
         /* modo privado: o tema já é o default */
       }
-    });
+    }, CHAVE_TEMA);
     await page.reload();
     await expect(page.getByTestId("grade-da-agenda")).toBeVisible({ timeout: ESPERA });
+    await expect
+      .poll(async () => page.evaluate(() => document.documentElement.getAttribute("data-theme")), {
+        timeout: ESPERA,
+      })
+      .toBe("light");
   });
 
   test("a grade troca de visão pelo clique, e cada visão desenha o que promete", async () => {
