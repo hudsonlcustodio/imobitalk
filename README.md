@@ -2,7 +2,7 @@
 
 🇧🇷 Português · [🇺🇸 English](README.en.md) · [🇪🇸 Español](README.es.md)
 
-# 🛠️ DeskcommCRM — o Sistema Operacional de Vendas com IA, open source, pro WhatsApp
+# 🏠 IMOBI CRM — o CRM imobiliário com IA, open source, para WhatsApp
 
 **Agentes de IA que atendem, qualificam e vendem no WhatsApp — dentro de um CRM open source rodando no seu servidor.**
 **Sem mensalidade, sem feature travada, seus dados com você. A alternativa aberta a Kommo, Octadesk e Intercom.**
@@ -22,7 +22,7 @@
 
 > ### ☁️ Rode este CRM em produção com 1 comando
 >
-> O DeskcommCRM foi desenvolvido em **parceria com a HostGator**: o [`hostgator-setup-kit/`](hostgator-setup-kit/)
+> O IMOBI CRM oferece um kit de instalação para **VPS HostGator**: o [`hostgator-setup-kit/`](hostgator-setup-kit/)
 > instala o CRM completo (app + WhatsApp + banco) numa VPS com um único comando, e o
 > [runbook de produção](docs/runbooks/waha-hostgator.md) já assume esse ambiente.
 >
@@ -68,7 +68,7 @@ Já dentro da VPS:
 
 ```bash
 git clone https://github.com/hudsonlcustodio/imobitalk.git
-cd DeskcommCRM
+cd imobitalk
 bash hostgator-setup-kit/install.sh
 ```
 
@@ -124,7 +124,7 @@ escaneie o QR code com o WhatsApp do seu número.
 ### 🤖 Prefere que uma IA instale pra você?
 
 Jogue a pasta `hostgator-setup-kit/` no chat do **Claude Code** rodando dentro da VPS e diga
-*"instala o DeskcommCRM pra mim"*. Ele lê o [`CLAUDE.md`](hostgator-setup-kit/CLAUDE.md) do kit
+*"instala o IMOBI CRM pra mim"*. Ele lê o [`CLAUDE.md`](hostgator-setup-kit/CLAUDE.md) do kit
 — que traz o passo a passo e as armadilhas já mapeadas — e conduz tudo em português.
 
 ---
@@ -151,7 +151,7 @@ volta no `.env` — sem isso, o próximo restart traria o app quebrado de novo, 
 ### Pelo terminal
 
 ```bash
-cd /caminho/do/DeskcommCRM
+cd /caminho/do/imobitalk
 bash hostgator-setup-kit/update.sh
 ```
 
@@ -199,7 +199,7 @@ Passo a passo em linguagem simples: [`docs/ATUALIZANDO.md`](docs/ATUALIZANDO.md)
 
 ## ✨ O que é
 
-**Deskcomm** vem de **Desk** (mesa) + **comm** (comércio): **o comercial de mesa** — toda a operação de vendas do seu negócio numa mesa só, operada por pessoas e agentes de IA juntos.
+**IMOBI CRM** reúne atendimento, relacionamento, funil e automação para operações imobiliárias que vendem pelo WhatsApp, com pessoas e agentes de IA trabalhando no mesmo processo.
 
 O projeto nasceu como CRM de e-commerce e a comunidade o levou muito além: hoje roda em **clínicas, imobiliárias, infoprodutos, agências, lojas e prestadores de serviço** — qualquer negócio que vende pelo WhatsApp. O produto acompanhou essa virada e virou um **sistema operacional de vendas**: agentes de IA com RAG por tenant atendem, qualificam, movem leads no funil, disparam automações e sabem a hora de passar pra um humano — com o CRM inteiro exposto via **MCP** pros agentes operarem de verdade. A história completa está em [`VISION.md`](VISION.md).
 
@@ -269,7 +269,7 @@ Detalhes: [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 ```bash
 git clone https://github.com/hudsonlcustodio/imobitalk.git
-cd DeskcommCRM
+cd imobitalk
 
 nvm use                     # Node 22
 npm install -g pnpm && pnpm install
@@ -305,7 +305,7 @@ App: <http://localhost:3000> · Health check: <http://localhost:3000/api/v1/heal
 ## 📁 Estrutura
 
 ```
-DeskcommCRM/
+imobitalk/
 ├── app/                    # Next.js App Router
 │   ├── (admin)/            # Rotas super-admin (impersonate, tenants)
 │   ├── (public)/           # Login, recovery
@@ -436,7 +436,7 @@ Pra **vulnerabilidades de segurança**, **NÃO abra issue pública** — use o [
 
 ### 🔮 Próximo
 
-- **MCP público** — capabilities do CRM expostas pro ecossistema de agentes: plugue o agente que quiser e ele opera o Deskcomm.
+- **MCP público** — capabilities do CRM expostas pro ecossistema de agentes: plugue o agente que quiser e ele opera o IMOBI CRM.
 - **Templates por nicho** — pipelines e vocabulários prontos pra clínica, imobiliária, infoproduto e serviços (e-commerce já entregue).
 - **Integrações** — VTEX e Shopify via adapter pattern (Nuvemshop já entregue).
 - **Identity probabilística** — unificação de contatos entre canais.
@@ -447,8 +447,6 @@ Pra **vulnerabilidades de segurança**, **NÃO abra issue pública** — use o [
 
 - **Discussões:** [GitHub Discussions](https://github.com/hudsonlcustodio/imobitalk/discussions) — pra perguntas, ideias, showcase.
 - **Issues:** [GitHub Issues](https://github.com/hudsonlcustodio/imobitalk/issues) — bugs e tasks.
-- **Instagram:** [@melgarafael](https://www.instagram.com/melgarafael)
-- **YouTube:** [youtube.com/@melgarafael](https://www.youtube.com/@melgarafael)
 
 ---
 
@@ -504,6 +502,6 @@ Este é um projeto **self-host**: cada pessoa roda o CRM na **própria infraestr
 
 **Built with ☕ in Brasil** · **Made for the community**
 
-Siga o desenvolvimento: [Instagram](https://www.instagram.com/melgarafael) · [YouTube](https://www.youtube.com/@melgarafael)
+Siga o desenvolvimento pelas [Issues](https://github.com/hudsonlcustodio/imobitalk/issues) e [Discussions](https://github.com/hudsonlcustodio/imobitalk/discussions) do projeto.
 
 </div>

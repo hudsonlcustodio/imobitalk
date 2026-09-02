@@ -2,7 +2,7 @@
 
 [🇧🇷 Português](README.md) · 🇺🇸 English · [🇪🇸 Español](README.es.md)
 
-# 🛠️ DeskcommCRM — The open-source AI Sales OS for WhatsApp
+# 🏠 IMOBI CRM — The open-source AI real-estate CRM for WhatsApp
 
 **AI agents that answer, qualify and sell on WhatsApp — inside an open-source CRM running on your own server.**
 **No subscription, no gated features, your data stays yours. The open alternative to Kommo, Octadesk and Intercom.**
@@ -22,7 +22,7 @@
 
 > ### ☁️ Run this CRM in production with one command
 >
-> DeskcommCRM is developed in **partnership with HostGator**: the [`hostgator-setup-kit/`](hostgator-setup-kit/)
+> IMOBI CRM provides an installation kit for **HostGator VPS**: the [`hostgator-setup-kit/`](hostgator-setup-kit/)
 > installs the full CRM (app + WhatsApp + database) on a VPS with a single command, and the
 > [production runbook](docs/runbooks/waha-hostgator.md) assumes that environment.
 >
@@ -68,7 +68,7 @@ Once inside the VPS:
 
 ```bash
 git clone https://github.com/hudsonlcustodio/imobitalk.git
-cd DeskcommCRM
+cd imobitalk
 bash hostgator-setup-kit/install.sh
 ```
 
@@ -126,7 +126,7 @@ onboarding, scan the QR code with your WhatsApp number.
 ### 🤖 Rather have an AI install it for you?
 
 Drop the `hostgator-setup-kit/` folder into **Claude Code** running inside the VPS and say
-*"install DeskcommCRM for me"*. It reads the kit's [`CLAUDE.md`](hostgator-setup-kit/CLAUDE.md)
+*"install IMOBI CRM for me"*. It reads the kit's [`CLAUDE.md`](hostgator-setup-kit/CLAUDE.md)
 — which carries the step-by-step and the already-mapped pitfalls — and walks you through it.
 
 ---
@@ -154,7 +154,7 @@ broken app back.
 ### From the terminal
 
 ```bash
-cd /path/to/DeskcommCRM
+cd /path/to/imobitalk
 bash hostgator-setup-kit/update.sh
 ```
 
@@ -200,7 +200,7 @@ esperados`, that one is worth keeping.
 
 ## ✨ What is it
 
-**Deskcomm** comes from **Desk** + **comm** (commerce): your entire sales operation on a single desk, run by people and AI agents working together.
+**IMOBI CRM** brings support, relationships, pipelines and automation together for real-estate operations that sell over WhatsApp, with people and AI agents working in the same process.
 
 The project was born as an e-commerce CRM — and the open-source community took it much further: today it runs in **clinics, real-estate agencies, info-product businesses, agencies, stores and service providers** — any business that sells over WhatsApp. The product followed that shift and became a **sales operating system**: AI agents with per-tenant RAG answer customers, qualify leads, move them through the pipeline, trigger automations and know when to hand off to a human — with the whole CRM exposed via **MCP** so agents can truly operate it. The full story is in [`VISION.md`](VISION.md).
 
@@ -270,7 +270,7 @@ Details: [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 ```bash
 git clone https://github.com/hudsonlcustodio/imobitalk.git
-cd DeskcommCRM
+cd imobitalk
 
 nvm use                     # Node 22
 npm install -g pnpm && pnpm install
@@ -399,7 +399,7 @@ For **security vulnerabilities**, **do NOT open a public issue** — use [privat
 
 ### 🔮 Next
 
-- **Public MCP** — CRM capabilities exposed to the agent ecosystem: plug in any agent and it operates Deskcomm.
+- **Public MCP** — CRM capabilities exposed to the agent ecosystem: plug in any agent and it operates IMOBI CRM.
 - **Niche templates** — ready-made pipelines and vocabularies for clinics, real estate, info-products and services (e-commerce already shipped).
 - **Integrations** — VTEX and Shopify via the adapter pattern (Nuvemshop already shipped).
 - **Probabilistic identity** — contact unification across channels.
@@ -410,8 +410,6 @@ For **security vulnerabilities**, **do NOT open a public issue** — use [privat
 
 - **Discussions:** [GitHub Discussions](https://github.com/hudsonlcustodio/imobitalk/discussions)
 - **Issues:** [GitHub Issues](https://github.com/hudsonlcustodio/imobitalk/issues)
-- **Instagram:** [@melgarafael](https://www.instagram.com/melgarafael)
-- **YouTube:** [youtube.com/@melgarafael](https://www.youtube.com/@melgarafael)
 
 ---
 
@@ -439,7 +437,7 @@ This is a **self-hosted** project: each person runs the CRM on their **own infra
 - **HostGator** — the infrastructure partnership that made one-command self-hosting possible.
 - **Anthropic**, **OpenAI** and **OpenRouter** — the AI providers the CRM knows how to use.
 - **shadcn/ui** — component base.
-- The community that took Deskcomm from e-commerce to clinics, real estate, info-products and beyond — you defined what this project is.
+- The upstream community that expanded the original project beyond e-commerce — its work remains credited in the repository history and MIT license.
 
 ---
 
