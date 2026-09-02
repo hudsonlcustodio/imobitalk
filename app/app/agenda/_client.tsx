@@ -217,8 +217,10 @@ export function AgendaClient({
     recorteDaGrade.de === recorteDoServidor.de && recorteDaGrade.ate === recorteDoServidor.ate;
 
   const { data: agendamentosVivos } = useAgendamentos(recorteDaGrade);
-  const todos: Agendamento[] =
-    agendamentosVivos ?? (naJanelaDoServidor ? agendamentosIniciais : []);
+  const todos: Agendamento[] = React.useMemo(
+    () => agendamentosVivos ?? (naJanelaDoServidor ? agendamentosIniciais : []),
+    [agendamentosVivos, naJanelaDoServidor, agendamentosIniciais],
+  );
 
   const agendamentos = React.useMemo(
     () => (isolada === null ? todos : todos.filter((a) => a.responsavelId === isolada)),

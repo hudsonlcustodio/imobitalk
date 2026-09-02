@@ -347,7 +347,7 @@ export function AgentForm(props: Props) {
       }
     }
     return errors;
-  }, [form, t]);
+  }, [form, props.provedoresDaInstalacao, t]);
 
   const isValid = Object.keys(validation).length === 0;
 

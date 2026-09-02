@@ -24,7 +24,7 @@ export function AgentsList({ initialData, canWrite }: Props) {
   const [query, setQuery] = useState("");
   const [showArchived, setShowArchived] = useState(false);
 
-  const agents = data ?? [];
+  const agents = useMemo(() => data ?? [], [data]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
