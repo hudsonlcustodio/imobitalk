@@ -1,7 +1,7 @@
 {
   "project": "IMOBI CRM",
-  "date": "2026-09-02",
-  "commit": "0f036d7",
+  "date": "2026-09-03",
+  "commit": "82f2d13d4ed85b2a55482858b639035a317aa347",
   "base_commit": "a329f1db4d0804b26c9333768b88b5a23cca64c7",
   "gate_prod": "BLOCKED",
   "gate_staging": "BLOCKED",
@@ -22,9 +22,9 @@
     {"gate":"db-rls","status":"BLOCKED","command":"pnpm test:db","result":"não executado: daemon Docker ausente"},
     {"gate":"e2e-local","status":"BLOCKED","command":"pnpm test:e2e","result":"não executado: harness depende de Docker/Supabase"},
     {"gate":"ci-base","status":"PASS","command":"gh run list --branch main","result":"ci, e2e, perf, security e imagens verdes em a329f1d"},
-    {"gate":"ci-current","status":"PASS","command":"gh pr checks 6","result":"verify, invariants, build-and-size, dependency-audit, CodeQL, E2E 1/2, imagens e boot aprovados em 0f036d7"},
+    {"gate":"ci-current","status":"PASS","command":"gh pr checks 6","result":"verify, invariants, build-and-size, dependency-audit, CodeQL, E2E 1/2, imagens e boot aprovados em 82f2d13"},
     {"gate":"release","status":"BLOCKED","command":"pnpm release:conferir; gh release list; gh api repos/hudsonlcustodio/imobitalk/tags","result":"dry-run propõe 1.11.2; nenhuma release/tag retornada; nada foi escrito"},
-    {"gate":"branch-protection","status":"FAIL","command":"gh api repos/hudsonlcustodio/imobitalk/rulesets","result":"nenhum ruleset retornado"},
+    {"gate":"branch-protection","status":"PASS","command":"gh api repos/hudsonlcustodio/imobitalk/branches/main/protection","result":"strict; admins; 7 checks; force-push e deletion bloqueados; resolução de conversas exigida"},
     {"gate":"staging","status":"BLOCKED","command":"not applicable","result":"infraestrutura e credenciais não fornecidas"},
     {"gate":"migration","status":"BLOCKED","command":"pnpm db:migrate:check","result":"SUPABASE_DB_ADMIN_URL de staging não fornecida"},
     {"gate":"restore","status":"BLOCKED","command":"not applicable","result":"ambiente isolado de restore não fornecido"}

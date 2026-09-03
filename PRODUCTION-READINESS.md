@@ -1,8 +1,8 @@
 # IMOBI CRM — Production Readiness
 
-Data da revisão: 2026-09-02
+Data da revisão: 2026-09-03
 
-Commit validado localmente e no CI: `0f036d7`
+Commit validado localmente e no CI: `82f2d13`
 
 Base remota: `a329f1db4d0804b26c9333768b88b5a23cca64c7`
 
@@ -33,12 +33,12 @@ Status: **Release Candidate — `GATE-PROD = BLOCKED`**
 | Build padrão | BLOCKED local | panic interno do Turbopack no Windows; CI Linux da base passou em `a329f1d` |
 | Build alternativo | FAIL local | webpack alcançou compilação e revelou resolução ausente de `client-only`/`server-only`; não é o caminho usado pelo CI |
 | Shell/packaging | BLOCKED local | todas as provas executadas passaram, exceto modo POSIX `0600`, que NTFS/Git Bash não representa |
-| DB/RLS invariants | PASS remoto | job `invariants` verde em `0f036d7` |
+| DB/RLS invariants | PASS remoto | job `invariants` verde em `82f2d13` |
 | E2E | PASS remoto | parte 1 em 13m24s e parte 2 em 23m42s; agregador verde |
 | Docker build/boot | PASS remoto | três builds, `imagem-do-app-sobe` e `imagens-ok` verdes |
-| CodeQL/security remoto | PASS | CodeQL e dependency audit verdes em `0f036d7` |
+| CodeQL/security remoto | PASS | CodeQL e dependency audit verdes em `82f2d13` |
 | GHCR | PASS para SHA / NOT VERIFIED para release | imagens do PR construídas; não há tag/release imutável confirmada |
-| Branch protection | FAIL | API não retornou ruleset e não há proteção comprovada |
+| Branch protection | PASS | sete checks obrigatórios, strict + admins; force-push/deletion bloqueados |
 | Release imutável + `stable` | BLOCKED | nenhuma tag/release Git; não promover antes dos demais gates |
 | Staging | BLOCKED | infraestrutura e credenciais não fornecidas |
 | Migration dry-run/aplicação | BLOCKED | `SUPABASE_DB_ADMIN_URL` de staging não fornecida |
@@ -48,16 +48,15 @@ Status: **Release Candidate — `GATE-PROD = BLOCKED`**
 
 ## Evidência remota do candidato
 
-Consultado em 2026-09-02 via GitHub CLI. Para `0f036d7`, passaram `verify`, `invariants`,
+Consultado em 2026-09-03 via GitHub CLI. Para `82f2d13`, passaram `verify`, `invariants`,
 `build-and-size`, dependency audit, CodeQL, E2E em duas partes, builds das três imagens,
 boot da imagem do app e o agregador `imagens-ok`.
 
 ## Bloqueadores mínimos
 
-1. Proteção da `main` exigindo os nomes reais dos checks críticos e proibindo force-push/deletion.
-2. Tag/release imutável somente depois dos gates técnicos; confirmar as três tags no GHCR.
-3. Staging separado com Supabase/Postgres, Redis, WAHA de teste, domínio/TLS e secrets próprios.
-4. Em staging: preflight, migration dry-run, backup, migration, invariantes, E2E/smoke e observação.
-5. Restore do backup em ambiente isolado, aplicação iniciada e smoke aprovado.
+1. Tag/release imutável somente depois dos gates técnicos; confirmar as três tags no GHCR.
+2. Staging separado com Supabase/Postgres, Redis, WAHA de teste, domínio/TLS e secrets próprios.
+3. Em staging: preflight, migration dry-run, backup, migration, invariantes, E2E/smoke e observação.
+4. Restore do backup em ambiente isolado, aplicação iniciada e smoke aprovado.
 
-Até esses cinco itens terem evidência, `GATE-PROD` permanece **BLOCKED**.
+Até esses quatro itens terem evidência, `GATE-PROD` permanece **BLOCKED**.
