@@ -200,7 +200,7 @@ export function AgendaInterativa({
         )}.`,
       );
     });
-  }, [agendamentos, pendente, remarcar]);
+  }, [agendamentos, localeDaData, pendente, remarcar]);
 
   const nomeDoPendente = pendente
     ? (agendamentos.find((a) => a.id === pendente.id)?.titulo ?? "o compromisso")
