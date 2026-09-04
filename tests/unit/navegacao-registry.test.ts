@@ -85,6 +85,8 @@ describe("sidebarGroups", () => {
     const hrefs = sidebarGroups(true, null).flatMap((g) => g.items.map((i) => i.href));
     // Conhecimento existe no registro, mas é do hub — não do sidebar.
     expect(hrefs).not.toContain("/app/ai/knowledge/sources");
+    // Nuvemshop permanece acessível por link direto, mas não aparece no painel.
+    expect(hrefs).not.toContain("/app/integrations/nuvemshop");
     expect(hrefs).toContain("/app/ai/agents");
   });
 

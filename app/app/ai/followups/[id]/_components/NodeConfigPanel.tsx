@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { FlowNode } from "@/lib/followup/graph-schema";
@@ -17,10 +18,12 @@ import { RepeatForm } from "./forms/RepeatForm";
 import { WaitForm } from "./forms/WaitForm";
 import type { ConfigOf } from "./forms/shared";
 import { NODE_VISUALS } from "./nodes/nodeVisuals";
+import { Trash } from "@/lib/ui/icons";
 
 interface Props {
   node: RFNode;
   onChange: (patch: Partial<RFNodeData>) => void;
+  onDelete?: () => void;
   /** Ramos deste nó que já têm aresta — quem sabe isso é o canvas, que é dono do grafo. */
   ramosLigados?: string[];
 }
@@ -34,13 +37,14 @@ interface Props {
  * quando o candidato passa no schema — senão mostra erro inline e o canvas
  * mantém a última config válida (nunca um valor pela metade rio acima).
  */
-export function NodeConfigPanel({ node, onChange, ramosLigados }: Props) {
+export function NodeConfigPanel({ node, onChange, onDelete, ramosLigados }: Props) {
   const t = useT();
   const type = node.type as FlowNode["type"];
   const visual = NODE_VISUALS[type];
   const Icon = visual.icon;
   const [label, setLabel] = useState(node.data.label);
   const [labelError, setLabelError] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const commitLabel = (value: string) => {
     setLabel(value);
@@ -120,6 +124,37 @@ export function NodeConfigPanel({ node, onChange, ramosLigados }: Props) {
           <EndForm config={node.data.config as ConfigOf<"end">} onChange={(config) => onChange({ config })} />
         )}
       </div>
+
+      {type !== "trigger" && onDelete && (
+        <div className="mt-auto space-y-2 border-t border-border pt-4">
+          {confirmDelete ? (
+            <div className="space-y-2 rounded-md border border-error/40 bg-error/5 p-3">
+              <p className="text-sm text-text">
+                {t("Remover este nó e todas as conexões ligadas a ele?")}
+              </p>
+              <div className="flex gap-2">
+                <Button type="button" size="sm" variant="destructive" onClick={onDelete}>
+                  <Trash size={14} className="mr-1" aria-hidden /> {t("Remover nó")}
+                </Button>
+                <Button type="button" size="sm" variant="ghost" onClick={() => setConfirmDelete(false)}>
+                  {t("Cancelar")}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              className="text-error-fg hover:text-error-fg"
+              data-testid="delete-node"
+              onClick={() => setConfirmDelete(true)}
+            >
+              <Trash size={14} className="mr-1" aria-hidden /> {t("Remover nó")}
+            </Button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

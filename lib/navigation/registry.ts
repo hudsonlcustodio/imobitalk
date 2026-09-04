@@ -414,7 +414,8 @@ export const NAV_DESTINATIONS: NavDestination[] = [
     // A página não filtra por papel, mas as Server Actions de conectar e
     // desconectar exigem admin — mostrar a um viewer seria oferecer botão morto.
     minRole: "admin",
-    sidebar: true,
+    // A integração continua disponível por URL direta para instalações que já
+    // a usam, mas não faz parte da navegação visível deste produto.
   },
   {
     href: "/app/webhooks",
