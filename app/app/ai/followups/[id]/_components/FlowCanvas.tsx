@@ -129,6 +129,14 @@ function FlowCanvasInner({ flowId, initialData }: Props) {
     },
     [setNodes],
   );
+  const deleteNode = useCallback(
+    (id: string) => {
+      setNodes((nds) => nds.filter((n) => n.id !== id));
+      setEdges((eds) => eds.filter((e) => e.source !== id && e.target !== id));
+      setSelectedNodeId(null);
+    },
+    [setEdges, setNodes],
+  );
   const updateEdgeCondition = useCallback(
     (id: string, condition: FlowEdge["condition"]) => {
       setEdges((eds) =>
@@ -332,6 +340,7 @@ function FlowCanvasInner({ flowId, initialData }: Props) {
                 key={selectedNode.id}
                 node={selectedNode}
                 onChange={(patch) => updateNodeData(selectedNode.id, patch)}
+                onDelete={() => deleteNode(selectedNode.id)}
                 ramosLigados={ramosLigadosDoSelecionado}
               />
             </div>

@@ -521,6 +521,10 @@ export const DICIONARIO: Traducoes = {
   "na aba Credenciais.": { es: "en la pestaña Credenciales." },
   "Palavras que chamam uma pessoa na hora": { es: "Palabras que llaman a una persona al instante" },
   Remover: { es: "Quitar" },
+  "Remover nó": { es: "Eliminar nodo" },
+  "Remover este nó e todas as conexões ligadas a ele?": {
+    es: "¿Eliminar este nodo y todas las conexiones vinculadas a él?",
+  },
   "Sem palavras-chave.": { es: "Sin palabras clave." },
   "Digite uma expressão e aperte Enter": { es: "Escribe una expresión y presiona Enter" },
   Adicionar: { es: "Agregar" },

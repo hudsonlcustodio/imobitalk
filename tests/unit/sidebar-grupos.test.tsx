@@ -75,13 +75,13 @@ describe("Sidebar agrupado", () => {
     expect(screen.getByRole("link", { name: "Funis" })).toHaveAttribute("href", "/app/kanban");
   });
 
-  it("desenterra Nuvemshop e Audit Log", () => {
+  it("mantém Nuvemshop fora do painel e deixa Audit Log alcançável", () => {
     comoPapel("admin");
     render(<Sidebar collapsed={false} />);
-    // Nuvemshop não tinha link nenhum no app; Audit Log só existia via card em
-    // Configurações. Canal oficial não está aqui de propósito: virou aba de
-    // Conexões no PR #105, e Conexões é a porta.
-    expect(screen.getByRole("link", { name: /Nuvemshop/ })).toBeTruthy();
+    // A integração Nuvemshop continua acessível por URL direta para quem já a
+    // usa, mas não faz parte da navegação visível deste produto. Audit Log, ao
+    // contrário, precisa continuar alcançável pelo menu.
+    expect(screen.queryByRole("link", { name: /Nuvemshop/ })).toBeNull();
     expect(screen.getByRole("link", { name: /Audit Log/ })).toBeTruthy();
   });
 
