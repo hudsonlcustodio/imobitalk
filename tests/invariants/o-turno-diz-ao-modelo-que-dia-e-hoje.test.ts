@@ -80,8 +80,9 @@ const INSTANTE = new Date("2026-09-04T17:30:00Z");
 
 /** O que o bloco tem de dizer. Se sair a hora de São Paulo, a fonte está errada. */
 const ESPERADO_MANAUS = "sexta-feira, 04/09/2026, 13:30 (America/Manaus)";
-/** O que ele NÃO pode dizer — é a hora que `channel_knobs`/pacing daria. */
-const HORA_DO_PACING = "14:30";
+/** A linha errada inteira que `channel_knobs`/pacing produziria. Comparar só
+ * "14:30" também casa timestamps legítimos do histórico da conversa. */
+const ESPERADO_PACING = "sexta-feira, 04/09/2026, 14:30 (America/Sao_Paulo)";
 
 interface EnvioCapturado {
   body: string;
@@ -280,8 +281,7 @@ describe("o prompt do turno carrega a data de hoje", () => {
     // (São Paulo, o default do pacing) e este caso é o único que reprova.
     await rodaTurno(montaHandler(modeloQueGravaOPrompt(), INSTANTE));
 
-    expect(promptsVistos[0]).not.toContain(HORA_DO_PACING);
-    expect(promptsVistos[0]).not.toContain("America/Sao_Paulo");
+    expect(promptsVistos[0]).not.toContain(ESPERADO_PACING);
   });
 
   it("o instante absoluto vai junto — é o formato que as ferramentas de agenda exigem", async () => {
