@@ -203,7 +203,10 @@ export function InboxLayout({ initialSelectedId = null }: InboxLayoutProps = {})
   // Deep-link para conversa fora do filtro atual (ou fora do escopo do agent):
   // busca única RLS-scoped. 404/vazio ⇒ inacessível ⇒ estado vazio claro (GAP D),
   // nunca stack trace. A RLS (G4-01) é quem garante o não-vazamento.
-  const needsFetch = !!selectedId && !inList && !listQ.isLoading;
+  // Deep-links must resolve independently of the conversation list. The list
+  // can be slow or filtered (for example, a closed conversation), so waiting
+  // for it delays the contact panel and creates a visible waterfall.
+  const needsFetch = !!selectedId && !inList;
   const single = useConversation(selectedId, needsFetch);
   const selectedConversation: ConversationWithContact | null = inList ?? single.data ?? null;
   const selectionNotFound =
