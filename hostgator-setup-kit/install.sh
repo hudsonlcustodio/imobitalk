@@ -659,6 +659,22 @@ rede_do_traefik() {  # rede_do_traefik <NetworkMode do contêiner> <redes do con
   printf '%s' "$redes" | awk '{print $1}'
 }
 
+# Descobre como o Traefik da hospedagem chama as portas 80 e 443. `web` e
+# `websecure` são convenções, não garantias: painéis como o EasyPanel usam
+# `http` e `https`. Um label para um entrypoint inexistente é ignorado sem erro,
+# deixando a instalação verde e o domínio respondendo 404.
+entrypoints_do_traefik() {  # entrypoints_do_traefik <env e args do contêiner, um por linha>
+  printf '%s\n' "${1:-}" | awk '
+    { l = tolower($0) }
+    l ~ /entrypoints[._][a-z0-9-]+[._]address=/ {
+      nome = l; sub(/[._]address=.*/, "", nome); sub(/.*entrypoints[._]/, "", nome)
+      porta = l; sub(/.*address=/, "", porta); sub(/\/.*/, "", porta); sub(/.*:/, "", porta)
+      if (porta == "80"  && http  == "") http  = nome
+      if (porta == "443" && https == "") https = nome
+    }
+    END { print http " " https }'
+}
+
 # Um Traefik eleito pela varredura de MODO HOST é suspeita, não prova. A eleição
 # por porta publicada tem a evidência na mão — a coluna Ports diz `:80->`. A
 # varredura por `--network host` não tem nenhuma: em modo host a coluna sai vazia
@@ -1310,6 +1326,24 @@ if [ "$REVERSE_PROXY" = "traefik" ] && [ -z "${TRAEFIK_NETWORK:-}" ]; then
   die "Não consegui descobrir a rede Docker do seu Traefik. Rode 'docker network ls',
 identifique a rede dele e ponha TRAEFIK_NETWORK=<nome> no .env antes de tentar de novo."
 fi
+# Os nomes dos entrypoints vêm do mesmo contêiner usado para detectar a rede.
+# Valores declarados manualmente no .env sempre têm prioridade.
+if [ "$REVERSE_PROXY" = "traefik" ] && [ -n "$traefik_container" ] \
+   && { [ -z "${TRAEFIK_ENTRYPOINT:-}" ] || [ -z "${TRAEFIK_ENTRYPOINT_HTTP:-}" ]; }; then
+  traefik_conf="$(docker inspect \
+    -f '{{range .Config.Env}}{{println .}}{{end}}{{range .Args}}{{println .}}{{end}}' \
+    "$traefik_container" 2>/dev/null || true)"
+  entrypoints_achados="$(entrypoints_do_traefik "$traefik_conf")"
+  if [ -z "${TRAEFIK_ENTRYPOINT_HTTP:-}" ] && [ -n "${entrypoints_achados%% *}" ]; then
+    TRAEFIK_ENTRYPOINT_HTTP="${entrypoints_achados%% *}"
+  fi
+  if [ -z "${TRAEFIK_ENTRYPOINT:-}" ] && [ -n "${entrypoints_achados##* }" ]; then
+    TRAEFIK_ENTRYPOINT="${entrypoints_achados##* }"
+  fi
+  if [ -n "${TRAEFIK_ENTRYPOINT:-}" ]; then
+    c_dim "  (entrypoints do Traefik: ${TRAEFIK_ENTRYPOINT_HTTP:-web} para HTTP, ${TRAEFIK_ENTRYPOINT} para HTTPS)"
+  fi
+fi
 # Confere (e cria, quando a rede é a nossa) — em _common.sh, porque o update.sh
 # precisa da mesma garantia antes do `dc up -d` dele. Também aplica o default
 # 'traefik', então a variável está pronta para o .env logo abaixo.
@@ -1771,7 +1805,7 @@ begin
   end if;
   select id into v_org from public.organizations where slug='minha-empresa';
   if v_org is null then
-    -- `locale` aqui, e não só no usuário dono: é a organização que responde
+    -- locale aqui, e não só no usuário dono: é a organização que responde
     -- pelos convidados que ainda não existem. Quem entra sem preferência
     -- própria cai neste valor, então gravar só no dono entregaria o sistema em
     -- português para todo mundo que ele convidasse numa instalação em espanhol.

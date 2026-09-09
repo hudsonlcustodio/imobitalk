@@ -472,15 +472,17 @@ ultima_versao_publicada() {
 # mão, o `docker compose pull` de toda VPS é negado — e como `pull` de serviço
 # com `image:` falha a operação inteira, a instalação morre no passo de subir.
 ghcr_status() {
-  local img="$1" tag="$2" tok
+  local img="$1" tag="$2" tok registry owner
+  registry="${IMG_NS%%/*}"
+  owner="${IMG_NS#*/}"
   tok="$(curl -fsS --max-time 6 \
-          "https://ghcr.io/token?scope=repository:${IMG_NS#ghcr.io/}/${img}:pull&service=ghcr.io" 2>/dev/null \
+          "https://${registry}/token?scope=repository:${owner}/${img}:pull&service=${registry}" 2>/dev/null \
         | sed -n 's/.*"token":"\([^"]*\)".*/\1/p')" || true
   if [ -z "$tok" ]; then printf '000'; return 0; fi
   curl -s -o /dev/null --max-time 6 -w '%{http_code}' \
     -H "Authorization: Bearer $tok" \
     -H 'Accept: application/vnd.oci.image.index.v1+json,application/vnd.docker.distribution.manifest.list.v2+json,application/vnd.docker.distribution.manifest.v2+json' \
-    "https://ghcr.io/v2/${IMG_NS#ghcr.io/}/${img}/manifests/${tag}" 2>/dev/null || printf '000'
+    "https://${registry}/v2/${owner}/${img}/manifests/${tag}" 2>/dev/null || printf '000'
 }
 
 # As TRÊS imagens existem e são públicas nesta referência?
