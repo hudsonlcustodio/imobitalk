@@ -1172,6 +1172,17 @@ vr_ok "driver overlay, chamada de 3 args → morre" driver_errado overlay traefi
 # Sem bridge do projeto conhecida (chamada defensiva), ausência volta a ser morte.
 vr_ok "sem rede nossa declarada → não inventa"    inexistente   ""      crm_proxy  ""
 
+echo "proxy reverso: entrypoints declarados pelo Traefik"
+ep_ok() {  # ep_ok <descrição> <esperado> <configuração>
+  local desc="$1" esperado="$2" real
+  real="$(entrypoints_do_traefik "${3:-}")"
+  if [ "$real" = "$esperado" ]; then printf '  ✓ %s\n' "$desc"
+  else printf '  ✗ %s (deu [%s], esperava [%s])\n' "$desc" "$real" "$esperado"; fail=1; fi
+}
+ep_ok "EasyPanel usa http/https" "http https" $'TRAEFIK_ENTRYPOINTS_HTTP_ADDRESS=:80\nTRAEFIK_ENTRYPOINTS_HTTPS_ADDRESS=:443'
+ep_ok "Traefik clássico usa web/websecure" "web websecure" $'--entrypoints.web.address=:80\n--entrypoints.websecure.address=:443'
+ep_ok "porta sem entrypoint de publicação é ignorada" " " '--entrypoints.metrics.address=:8082'
+
 # ── Overlay do Swarm ────────────────────────────────────────────────────────
 # Numa VPS com Docker Swarm o Traefik vive numa overlay, e a recusa por driver
 # matava a instalação com "ponha a bridge certa em TRAEFIK_NETWORK" — instrução
